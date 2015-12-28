@@ -4,9 +4,13 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.tasks.Delete
 import org.gradle.api.tasks.JavaExec;
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory;
 
 class AssertjGen implements Plugin<Project> {
-
+    
+    private static final Logger logger = LoggerFactory.getLogger(AssertjGen);
+    
     @Override
     void apply(Project project) {
         project.extensions.create('assertjGen', AssertjGenConfiguration)
@@ -25,17 +29,22 @@ class AssertjGen implements Plugin<Project> {
     
     private void defineAssertjGenTask(Project project) {
         
-        project.task(type: JavaExec, dependsOn: 'assertjClean', 'assertjGen') {
-            AssertjGenConfiguration conf = project.assertjGen
-            File outputDir = conf.getOutputDirAsFile()
-            
+        project.task(type: JavaExec, dependsOn: ['assertjClean', 'compileJava'], 'assertjGen') {
             doFirst {
+                AssertjGenConfiguration conf = project.assertjGen
+                File outputDir = conf.getOutputDirAsFile()
+                
                 if (!outputDir.exists()) {
                     outputDir.mkdirs()
                 }
                 
-                project.sourceSets.test.java.srcDirs.add(conf.getOutputDirAsFile().path)
+                if (conf.classOrPackageNames.isEmpty()) {
+                    logger.warn('* classOrPackageNames is empty. Please to specify target class or package names.')
+                }
+                
+                this.addSrcDir(project, conf)
                 this.defineConfiguration(project, conf)
+                this.debugLog(project, conf)
                 
                 main 'org.assertj.assertions.generator.cli.AssertionGeneratorLauncher'
                 classpath = project.files(project.configurations[conf.configurationName])
@@ -47,18 +56,41 @@ class AssertjGen implements Plugin<Project> {
         project.compileTestJava.dependsOn('assertjGen')
     }
     
+    private void addSrcDir(Project project, AssertjGenConfiguration conf) {
+        project.sourceSets.test.java.srcDirs.add(conf.getOutputDirAsFile().path)
+    }
+    
     private void defineConfiguration(Project project, AssertjGenConfiguration conf) {
         String configurationName = conf.configurationName
         
         project.configurations.create(configurationName)
         
         project.dependencies.add(configurationName, conf.assertjGenerator)
-        project.dependencies.add(configurationName, project.project(conf.projectPath))
+        project.dependencies.add(configurationName, project.files(project.compileJava.destinationDir))
     }
     
     private void defineAssertjCleanTask(Project project) {
         project.task(type: Delete, 'assertjClean') << {
-            delete project.assertjGen.getOutputDirAsFile()
+            this.clean(project)
+        }
+        
+        project.clean.doFirst {
+            this.clean(project)
+        }
+    }
+    
+    private void clean(Project project) {
+        project.delete project.assertjGen.getOutputDirAsFile()
+    }
+    
+    private void debugLog(Project project, AssertjGenConfiguration conf) {
+        if (logger.isDebugEnabled()) {
+            logger.debug("""\
+            |configurationName = ${conf.configurationName}
+            |classpath = ${project.configurations[conf.configurationName]}
+            |outputDir = ${conf.getOutputDirAsFile()}
+            |classOrPackageNames = ${conf.classOrPackageNames}
+            |""".stripMargin())
         }
     }
 }

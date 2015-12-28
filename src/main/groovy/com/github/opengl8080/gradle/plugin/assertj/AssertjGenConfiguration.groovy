@@ -3,7 +3,6 @@ package com.github.opengl8080.gradle.plugin.assertj
 class AssertjGenConfiguration {
     String configurationName = 'assertj'
     Object outputDir = 'src/test/java-gen'
-    String projectPath = ':'
     String assertjGenerator = 'org.assertj:assertj-assertions-generator:2.0.0'
     List<String> classOrPackageNames = []
     
