@@ -2,6 +2,6 @@
 .project
 .gradle/
 build/
-src/main/java/
-src/test/java-gen/
 .settings/
+.idea/
+testproject/
