@@ -28,6 +28,24 @@ assertjGen {
 
 At least you must set `classOrPackageNames` option.
 
+### cleanOnlyFiles option
+If you want output files into a directory that includes handmade files (e.g. `src/test/java`), please set `cleanOnlyFiles` option to `true`.
+
+```groovy
+assertjGen {
+    classOrPackageNames = ['foo.bar']
+    outputDir = 'src/test/java'
+    cleanOnlyFiles = true
+}
+```
+
+If `cleanOnlyFiles` option is `false` (default is `false`), `assertjClean` task deletes all files under an `outputDir`.  
+So handmade files will be deleted.
+
+If `cleanOnlyFiles` option is `true`, `assertjClean` task only deletes matched files by `cleanFilesPattern` option.  
+`cleanFilesPattern` option is regular expression. Its default value is `/^.*Assert\.java$/`.
+
+
 # Defined Tasks
 ## assertjGen
 This task generates assertion classes.
@@ -74,6 +92,24 @@ assertjGen {
 
 最低でも `classOrPackageNames` オプションを指定すれば OK です。
 
+### cleanOnlyFiles オプション
+もし自動生成したファイルを手で作成したファイルを含むディレクトリ（例：`src/test/java`）に出力したい場合は、 `cleanOnlyFiles` オプションに `true` を指定してください。
+
+```groovy
+assertjGen {
+    classOrPackageNames = ['foo.bar']
+    outputDir = 'src/test/java'
+    cleanOnlyFiles = true
+}
+```
+
+もし `cleanOnlyFiles` オプションが `false` （デフォルトは `false`）だと、 `assertjClean` タスクは `outputDir` 以下の全てのファイルを削除します。  
+そのため、手で作ったファイルも削除されてしまいます。
+
+`cleanOnlyFiles` オプションに `true` を設定すれば、 `assertjClean` タスクは `cleanFilesPattern` オプションにマッチするファイルだけを削除します。  
+`cleanFilesPattern` オプションは正規表現で、デフォルト値は `/^.*Assert\.java$/` です。
+
+
 ## 追加されるタスク
 ### assertjGen
 アサーションクラスを生成するタスクです。
@@ -88,3 +124,15 @@ assertjGen {
 
 このタスクは、 `clean` タスクを実行すると一緒に実行されます。
 
+# Release Note
+## English
+- v1.1.0 (2016-10-15)
+    - Add `cleanOnlyFiles` and `cleanFilesPattern` options.
+- v1.0.0
+    - First Release
+
+## 日本語
+- v1.1.0 (2016-10-15)
+    - `cleanOnlyFiles` と `cleanFilesPattern` オプションを追加。
+- v1.0.0
+    - 初回リリース
