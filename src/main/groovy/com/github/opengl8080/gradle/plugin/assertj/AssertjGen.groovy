@@ -1,5 +1,6 @@
 package com.github.opengl8080.gradle.plugin.assertj
 
+import groovy.io.FileType
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.tasks.Delete
@@ -80,7 +81,18 @@ class AssertjGen implements Plugin<Project> {
     }
     
     private void clean(Project project) {
-        project.delete project.assertjGen.getOutputDirAsFile()
+        if (!project.assertjGen.cleanOnlyFiles) {
+            project.delete project.assertjGen.getOutputDirAsFile()
+            return
+        }
+
+        File outputDir = project.assertjGen.getOutputDirAsFile()
+
+        outputDir.eachFileRecurse(FileType.FILES) { file ->
+            if (file.name =~ project.assertjGen.cleanFilesPattern) {
+                file.delete()
+            }
+        }
     }
     
     private void debugLog(Project project, AssertjGenConfiguration conf) {
@@ -90,6 +102,8 @@ class AssertjGen implements Plugin<Project> {
             |classpath = ${project.configurations[conf.configurationName]}
             |outputDir = ${conf.getOutputDirAsFile()}
             |classOrPackageNames = ${conf.classOrPackageNames}
+            |cleanOnlyFiles = ${conf.cleanOnlyFiles}
+            |cleanFilesPattern = ${conf.cleanFilesPattern}
             |""".stripMargin())
         }
     }
