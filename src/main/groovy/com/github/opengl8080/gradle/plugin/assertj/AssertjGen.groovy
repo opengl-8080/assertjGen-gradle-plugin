@@ -4,9 +4,9 @@ import groovy.io.FileType
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.tasks.Delete
-import org.gradle.api.tasks.JavaExec;
+import org.gradle.api.tasks.JavaExec
 import org.slf4j.Logger
-import org.slf4j.LoggerFactory;
+import org.slf4j.LoggerFactory
 
 class AssertjGen implements Plugin<Project> {
     
@@ -71,10 +71,11 @@ class AssertjGen implements Plugin<Project> {
     }
     
     private void defineAssertjCleanTask(Project project) {
-        project.task(type: Delete, 'assertjClean') << {
+        project.task(type: Delete, 'assertjClean')
+        project.assertjClean.doLast {
             this.clean(project)
         }
-        
+
         project.clean.doFirst {
             this.clean(project)
         }
