@@ -126,6 +126,9 @@ assertjGen {
 
 # Release Note
 ## English
+- v1.1.2 (2017-02-12)
+    - Bugfix #3
+    - Bugfix #5
 - v1.1.1 (2017-01-29)
     - Removed `Task.leftShift` (Closure) deprecation warning.
 - v1.1.0 (2016-10-15)
@@ -134,6 +137,9 @@ assertjGen {
     - First Release
 
 ## 日本語
+- v1.1.2 (2017-02-12)
+    - Bugfix #3
+    - Bugfix #5
 - v1.1.1 (2017-01-29)
     - `Task.leftShift` の非推奨警告を除去
 - v1.1.0 (2016-10-15)
