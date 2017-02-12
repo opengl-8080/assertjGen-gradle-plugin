@@ -91,6 +91,10 @@ class AssertjGen implements Plugin<Project> {
         
         File outputDir = this.resolveOutputDir(project)
 
+        if (!outputDir.exists()) {
+            return
+        }
+        
         outputDir.eachFileRecurse(FileType.FILES) { file ->
             if (file.name =~ project.assertjGen.cleanFilesPattern) {
                 file.delete()
