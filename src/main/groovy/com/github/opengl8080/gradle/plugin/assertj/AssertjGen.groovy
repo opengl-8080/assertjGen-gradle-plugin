@@ -32,18 +32,19 @@ class AssertjGen implements Plugin<Project> {
         
         project.task(type: JavaExec, dependsOn: ['assertjClean', 'compileJava'], 'assertjGen') {
             doFirst {
-                AssertjGenConfiguration conf = project.assertjGen
-                File outputDir = conf.getOutputDirAsFile()
+                File outputDir = this.resolveOutputDir(project)
                 
                 if (!outputDir.exists()) {
                     outputDir.mkdirs()
                 }
                 
+                AssertjGenConfiguration conf = project.assertjGen
+                
                 if (conf.classOrPackageNames.isEmpty()) {
                     logger.warn('* classOrPackageNames is empty. Please to specify target class or package names.')
                 }
                 
-                this.addSrcDir(project, conf)
+                this.addSrcDir(project)
                 this.defineConfiguration(project, conf)
                 this.debugLog(project, conf)
                 
@@ -57,8 +58,9 @@ class AssertjGen implements Plugin<Project> {
         project.compileTestJava.dependsOn('assertjGen')
     }
     
-    private void addSrcDir(Project project, AssertjGenConfiguration conf) {
-        project.sourceSets.test.java.srcDirs.add(conf.getOutputDirAsFile().path)
+    private void addSrcDir(Project project) {
+        File outputDir = this.resolveOutputDir(project)
+        project.sourceSets.test.java.srcDirs.add(outputDir.path)
     }
     
     private void defineConfiguration(Project project, AssertjGenConfiguration conf) {
@@ -83,16 +85,25 @@ class AssertjGen implements Plugin<Project> {
     
     private void clean(Project project) {
         if (!project.assertjGen.cleanOnlyFiles) {
-            project.delete project.assertjGen.getOutputDirAsFile()
+            project.delete this.resolveOutputDir(project)
             return
         }
-
-        File outputDir = project.assertjGen.getOutputDirAsFile()
+        
+        File outputDir = this.resolveOutputDir(project)
 
         outputDir.eachFileRecurse(FileType.FILES) { file ->
             if (file.name =~ project.assertjGen.cleanFilesPattern) {
                 file.delete()
             }
+        }
+    }
+    
+    private File resolveOutputDir(Project project) {
+        File outputDir = project.assertjGen.getOutputDirAsFile()
+        if (outputDir.isAbsolute()) {
+            return outputDir
+        } else {
+            return new File(project.projectDir, outputDir.path)
         }
     }
     
