@@ -19,6 +19,7 @@ class AssertjGen implements Plugin<Project> {
         this.defineJavaPlugin(project)
         this.defineAssertjCleanTask(project)
         this.defineAssertjGenTask(project)
+        this.defineConfiguration(project)
     }
     
     private void defineJavaPlugin(Project project) {
@@ -45,7 +46,6 @@ class AssertjGen implements Plugin<Project> {
                 }
                 
                 this.addSrcDir(project)
-                this.defineConfiguration(project, conf)
                 this.debugLog(project, conf)
                 
                 main 'org.assertj.assertions.generator.cli.AssertionGeneratorLauncher'
@@ -63,7 +63,8 @@ class AssertjGen implements Plugin<Project> {
         project.sourceSets.test.java.srcDirs.add(outputDir.path)
     }
     
-    private void defineConfiguration(Project project, AssertjGenConfiguration conf) {
+    private void defineConfiguration(Project project) {
+        AssertjGenConfiguration conf = project.assertjGen
         String configurationName = conf.configurationName
         
         project.configurations.create(configurationName)
