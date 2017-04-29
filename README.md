@@ -126,6 +126,8 @@ assertjGen {
 
 # Release Note
 ## English
+- v1.1.3 (2017-04-29)
+    - Bugfix [#4](https://github.com/opengl-8080/assertjGen-gradle-plugin/issues/4) and [#7](https://github.com/opengl-8080/assertjGen-gradle-plugin/issues/7)
 - v1.1.2 (2017-02-12)
     - Bugfix [#3](https://github.com/opengl-8080/assertjGen-gradle-plugin/issues/3)
     - Bugfix [#5](https://github.com/opengl-8080/assertjGen-gradle-plugin/issues/5)
@@ -137,6 +139,8 @@ assertjGen {
     - First Release
 
 ## 日本語
+- v1.1.3 (2017-04-29)
+    - Bugfix [#4](https://github.com/opengl-8080/assertjGen-gradle-plugin/issues/4) and [#7](https://github.com/opengl-8080/assertjGen-gradle-plugin/issues/7)
 - v1.1.2 (2017-02-12)
     - Bugfix [#3](https://github.com/opengl-8080/assertjGen-gradle-plugin/issues/3)
     - Bugfix [#5](https://github.com/opengl-8080/assertjGen-gradle-plugin/issues/5)
