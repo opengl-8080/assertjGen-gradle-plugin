@@ -24,9 +24,6 @@ class AssertjGen implements Plugin<Project> {
     
     private void defineJavaPlugin(Project project) {
         project.apply(plugin: 'java')
-        project.repositories {
-            mavenCentral()
-        }
     }
     
     private void defineAssertjGenTask(Project project) {
