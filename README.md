@@ -1,6 +1,31 @@
 # assertjGen-gradle-plugin
 Gradle plugin that generate AssertJ assertion class.
 
+# Attention (2017-07-08)
+You may get an error if you upgrade to 1.1.4+.
+Because `repositories` configuration was removed for bugfix [#8](https://github.com/opengl-8080/assertjGen-gradle-plugin/issues/8).
+
+**AssertjGen.groovy**
+
+```diff
+- project.repositories {
+-     mavenCentral()
+- }
+```
+
+Therefore Gradle will lose a `repositories` configuration, if you had not configured `repositories` and upgrade to 1.1.4+.
+
+Please configure `repositories` explicitly.
+
+**your build.gradle**
+
+```diff
++ repositories {
++     mavenCentral()
++ }
+```
+
+
 # Installation
 See [Gradle - Plugin: com.github.opengl-BOBO.assertjGen](https://plugins.gradle.org/plugin/com.github.opengl-BOBO.assertjGen)
 
@@ -14,6 +39,12 @@ This task generates **Assertion Classes** by [AssertJ Assertions Generator](http
 **build.gradle**
 
 ```groovy
+repositories {
+    // Plugin uses an 'assertj-assertions-generator' module.
+    // Therefore specified repository must have the module.
+    mavenCentral()
+}
+
 assertjGen {
     // specify target class or package names by array. (defailt is empty array)
     classOrPackageNames = ['foo.bar']
@@ -61,6 +92,31 @@ This task deletes generated classes (`*.java` files).
 If you run `clean` task, then `assertjClean` task is also run.
 
 # 日本語の説明
+## 注意 (2017-07-08)
+1.1.4 以上にアップデートすると、エラーになることがあります。
+理由は、 [#8](https://github.com/opengl-8080/assertjGen-gradle-plugin/issues/8) のバグ修正で `repositories` の設定を除去したためです。
+
+**AssertjGen.groovy**
+
+```diff
+- project.repositories {
+-     mavenCentral()
+- }
+```
+
+したがって、もし `repositories` の設定をせずに 1.1.4 以上にアップデートした場合、 Gradle は `repositories` の設定を見失うことになります。
+
+明示的に `repositories` の設定をしてください。
+
+**あなたの build.gradle**
+
+```diff
++ repositories {
++     mavenCentral()
++ }
+```
+
+
 ## インストール方法
 [Gradle - Plugin: com.github.opengl-BOBO.assertjGen](https://plugins.gradle.org/plugin/com.github.opengl-BOBO.assertjGen)
 
@@ -78,6 +134,12 @@ If you run `clean` task, then `assertjClean` task is also run.
 **build.gradle**
 
 ```groovy
+repositories {
+    // このプラグインは 'assertj-assertions-generator' を使用します。
+    // したがって、ここで指定したリポジトリはそのモジュールを持っている必要があります。
+    mavenCentral()
+}
+
 assertjGen {
     // 対象のクラスか、パッケージ名を String のリストで指定します。（デフォルトは空のリストです）
     classOrPackageNames = ['foo.bar']
@@ -126,6 +188,8 @@ assertjGen {
 
 # Release Note
 ## English
+- v1.1.4 (2017-07-08)
+    - Bugfix [#8](https://github.com/opengl-8080/assertjGen-gradle-plugin/issues/8)
 - v1.1.3 (2017-04-29)
     - Bugfix [#4](https://github.com/opengl-8080/assertjGen-gradle-plugin/issues/4) and [#7](https://github.com/opengl-8080/assertjGen-gradle-plugin/issues/7)
 - v1.1.2 (2017-02-12)
@@ -139,6 +203,8 @@ assertjGen {
     - First Release
 
 ## 日本語
+- v1.1.4 (2017-07-08)
+    - Bugfix [#8](https://github.com/opengl-8080/assertjGen-gradle-plugin/issues/8)
 - v1.1.3 (2017-04-29)
     - Bugfix [#4](https://github.com/opengl-8080/assertjGen-gradle-plugin/issues/4) and [#7](https://github.com/opengl-8080/assertjGen-gradle-plugin/issues/7)
 - v1.1.2 (2017-02-12)
