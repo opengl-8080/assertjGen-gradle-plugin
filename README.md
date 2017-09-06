@@ -39,6 +39,21 @@ This task generates **Assertion Classes** by [AssertJ Assertions Generator](http
 **build.gradle**
 
 ```groovy
+buildscript {
+    ...
+}
+
+ext {
+    // This property must be declared before to apply plugin ("apply plugin: 'com.github.opengl-BOBO.assertjGen'").
+    // Because assertjGen plugin needs read these options before define tasks.
+    assertjGen = [
+        // specify AssertJ Assertions Generator dependency. (default is ver 2.0.0)
+        'assertjGenerator': 'org.assertj:assertj-assertions-generator:2.0.0'
+    ]
+}
+
+apply plugin: 'com.github.opengl-BOBO.assertjGen'
+
 repositories {
     // Plugin uses an 'assertj-assertions-generator' module.
     // Therefore specified repository must have the module.
@@ -51,9 +66,6 @@ assertjGen {
     
     // specify output dir(String path or File object). (default is 'src/test/java-gen')
     outputDir = 'src/test/foo-bar'
-    
-    // specify AssertJ Assertions Generator dependency. (default is ver 2.0.0)
-    assertjGenerator = 'org.assertj:assertj-assertions-generator:2.0.0'
 }
 ```
 
@@ -134,6 +146,21 @@ If you run `clean` task, then `assertjClean` task is also run.
 **build.gradle**
 
 ```groovy
+buildscript {
+    ...
+}
+
+ext {
+    // このプロパティはプラグインを適用する（"apply plugin: 'com.github.opengl-BOBO.assertjGen'"）前に宣言する必要があります。
+    // それは、ここで宣言するプロパティはプラグインがタスクを定義する前に読み込む必要があるからです。
+    assertjGen = [
+        // AssertJ Assertions Generator の依存関係を指定します（デフォルトは 2.0.0 を使用します）
+        'assertjGenerator': 'org.assertj:assertj-assertions-generator:2.0.0'
+    ]
+}
+
+apply plugin: 'com.github.opengl-BOBO.assertjGen'
+
 repositories {
     // このプラグインは 'assertj-assertions-generator' を使用します。
     // したがって、ここで指定したリポジトリはそのモジュールを持っている必要があります。
@@ -146,9 +173,6 @@ assertjGen {
     
     // 生成されたファイルの出力先を指定します（String のパスで指定するか、 File オブジェクトで指定します）（デフォルトは src/test/java-gen です）
     outputDir = 'src/test/foo-bar'
-    
-    // AssertJ Assertions Generator の依存関係を指定します（デフォルトは 2.0.0 を使用します）
-    assertjGenerator = 'org.assertj:assertj-assertions-generator:2.0.0'
 }
 ```
 
@@ -188,6 +212,8 @@ assertjGen {
 
 # Release Note
 ## English
+- v1.1.5 (2017-09-06)
+    - Update README.md about `assertjGenerator` option. [#12](https://github.com/opengl-8080/assertjGen-gradle-plugin/issues/12)
 - v1.1.4 (2017-07-08)
     - Bugfix [#8](https://github.com/opengl-8080/assertjGen-gradle-plugin/issues/8)
 - v1.1.3 (2017-04-29)
@@ -203,6 +229,8 @@ assertjGen {
     - First Release
 
 ## 日本語
+- v1.1.5 (2017-09-06)
+    - `assertjGenerator` オプションについて README.md の説明を更新. [#12](https://github.com/opengl-8080/assertjGen-gradle-plugin/issues/12)
 - v1.1.4 (2017-07-08)
     - Bugfix [#8](https://github.com/opengl-8080/assertjGen-gradle-plugin/issues/8)
 - v1.1.3 (2017-04-29)
