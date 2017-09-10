@@ -10,7 +10,12 @@ import org.slf4j.LoggerFactory
 
 class AssertjGen implements Plugin<Project> {
     
-    private static final Logger logger = LoggerFactory.getLogger(AssertjGen);
+    private static final Logger logger = LoggerFactory.getLogger(AssertjGen)
+
+    private static final Map DEFAULT_PRE_CONFIG = [
+            "assertjGenerator": "org.assertj:assertj-assertions-generator:2.0.0",
+            "configurationName": "assertj"
+    ]
     
     @Override
     void apply(Project project) {
@@ -45,8 +50,10 @@ class AssertjGen implements Plugin<Project> {
                 this.addSrcDir(project)
                 this.debugLog(project, conf)
                 
+                Map preConfig = this.getPreConfig(project)
+                
                 main 'org.assertj.assertions.generator.cli.AssertionGeneratorLauncher'
-                classpath = project.files(project.configurations[conf.configurationName])
+                classpath = project.files(project.configurations[preConfig.configurationName])
                 workingDir = outputDir
                 args = conf.classOrPackageNames
             }
@@ -61,12 +68,12 @@ class AssertjGen implements Plugin<Project> {
     }
     
     private void defineConfiguration(Project project) {
-        AssertjGenConfiguration conf = project.assertjGen
-        String configurationName = conf.configurationName
+        Map preConfig = this.getPreConfig(project)
+        String configurationName = preConfig.configurationName
         
         project.configurations.create(configurationName)
         
-        project.dependencies.add(configurationName, conf.assertjGenerator)
+        project.dependencies.add(configurationName, preConfig.assertjGenerator)
         project.dependencies.add(configurationName, project.files(project.compileJava.destinationDir))
     }
     
@@ -107,6 +114,20 @@ class AssertjGen implements Plugin<Project> {
         } else {
             return new File(project.projectDir, outputDir.path)
         }
+    }
+    
+    private Map getPreConfig(Project project) {
+        if (!project.hasProperty("assertjGenPreConfig")) {
+            project.ext.set("assertjGenPreConfig", [:])
+        }
+
+        DEFAULT_PRE_CONFIG.each { key, value ->
+            if (!project.assertjGenPreConfig.containsKey(key)) {
+                project.assertjGenPreConfig.put(key, value)
+            }
+        }
+        
+        return project.assertjGenPreConfig
     }
     
     private void debugLog(Project project, AssertjGenConfiguration conf) {
