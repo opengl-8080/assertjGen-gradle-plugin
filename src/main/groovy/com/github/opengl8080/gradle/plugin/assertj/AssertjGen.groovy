@@ -5,6 +5,8 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.tasks.Delete
 import org.gradle.api.tasks.JavaExec
+import org.gradle.api.tasks.SourceSet
+import org.gradle.api.tasks.SourceSetContainer
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -13,8 +15,9 @@ class AssertjGen implements Plugin<Project> {
     private static final Logger logger = LoggerFactory.getLogger(AssertjGen)
 
     private static final Map DEFAULT_PRE_CONFIG = [
-            "assertjGenerator": "org.assertj:assertj-assertions-generator:2.0.0",
-            "configurationName": "assertj"
+        "assertjGenerator": "org.assertj:assertj-assertions-generator:2.0.0",
+        "configurationName": "assertj",
+        "sourceSets": ["main"]
     ]
     
     @Override
@@ -32,8 +35,9 @@ class AssertjGen implements Plugin<Project> {
     }
     
     private void defineAssertjGenTask(Project project) {
+        List<String> dependsOnTaskNames = this.createDependsOnTaskNames(project)
         
-        project.task(type: JavaExec, dependsOn: ['assertjClean', 'compileJava'], 'assertjGen') {
+        project.task(type: JavaExec, dependsOn: dependsOnTaskNames, 'assertjGen') {
             doFirst {
                 File outputDir = this.resolveOutputDir(project)
                 
@@ -62,6 +66,18 @@ class AssertjGen implements Plugin<Project> {
         project.compileTestJava.dependsOn('assertjGen')
     }
     
+    private List<String> createDependsOnTaskNames(Project project) {
+        List<String> dependsOnTaskNames = ["assertjClean"]
+        
+        List<String> compileJavaTaskNames = this.getConfiguredSourceSets(project).collect { sourceSet ->
+            sourceSet.compileJavaTaskName
+        }
+
+        dependsOnTaskNames.addAll(compileJavaTaskNames)
+        
+        return dependsOnTaskNames
+    }
+    
     private void addSrcDir(Project project) {
         File outputDir = this.resolveOutputDir(project)
         project.sourceSets.test.java.srcDirs.add(outputDir.path)
@@ -74,7 +90,11 @@ class AssertjGen implements Plugin<Project> {
         project.configurations.create(configurationName)
         
         project.dependencies.add(configurationName, preConfig.assertjGenerator)
-        project.dependencies.add(configurationName, project.files(project.compileJava.destinationDir))
+
+        this.getConfiguredSourceSets(project).each {sourceSet ->
+            File classesDir = sourceSet.output.classesDir
+            project.dependencies.add(configurationName, project.files(classesDir))
+        }
     }
     
     private void defineAssertjCleanTask(Project project) {
@@ -113,6 +133,13 @@ class AssertjGen implements Plugin<Project> {
             return outputDir
         } else {
             return new File(project.projectDir, outputDir.path)
+        }
+    }
+    
+    private List<SourceSet> getConfiguredSourceSets(Project project) {
+        return this.getPreConfig(project).sourceSets.collect { String name ->
+            SourceSetContainer ssc = project.sourceSets
+            ssc[name]
         }
     }
     
