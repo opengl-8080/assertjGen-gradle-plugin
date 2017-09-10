@@ -39,12 +39,23 @@ buildscript {
     ...
 }
 
+apply plugin: 'java'
+
+// You must declare a custom 'sourceSets' configuration before include 'assertjGen' plugin.
+// Because, 'assertjGen' plugin needs to read 'sourceSets' at it was loaded. 
+sourceSets {
+    foo.java.srcDirs { "src/main/foo" }
+    bar.java.srcDirs { "src/main/bar" }
+}
+
 ext {
     // This property must be declared before to apply plugin ("apply plugin: 'com.github.opengl-BOBO.assertjGen'").
     // Because assertjGen plugin needs read these options before define tasks.
     assertjGenPreConfig = [
         // specify AssertJ Assertions Generator dependency. (default is ver 2.0.0)
-        'assertjGenerator': 'org.assertj:assertj-assertions-generator:2.0.0'
+        'assertjGenerator': 'org.assertj:assertj-assertions-generator:2.0.0',
+        // specify sourceSets names. (default is ['main'])
+        'sourceSets': ['main', 'foo', 'bar']
     ]
 }
 
@@ -101,7 +112,8 @@ If you run `clean` task, then `assertjClean` task is also run.
 
 # Release Note
 - v1.1.5 (2017-09-06)
-    - Update README.md about `assertjGenerator` option. [#12](https://github.com/opengl-8080/assertjGen-gradle-plugin/issues/12)
+    - Add `assertjGenPreConfig` option for bugfix #12, and move `assertjGenerator` option to it. [#12](https://github.com/opengl-8080/assertjGen-gradle-plugin/issues/12)
+    - Add `sourceSets` option to `assertjGenPreConfig`. [#11](https://github.com/opengl-8080/assertjGen-gradle-plugin/issues/11)
 - v1.1.4 (2017-07-08)
     - Bugfix [#8](https://github.com/opengl-8080/assertjGen-gradle-plugin/issues/8)
 - v1.1.3 (2017-04-29)
@@ -189,12 +201,23 @@ buildscript {
     ...
 }
 
+apply plugin: 'java'
+
+// カスタムの sourceSets の追加は、必ず assertjGen を読み込む前に宣言してください。
+// これは、 assertjGen が読み込まれたときに追加された sourceSets にアクセスする必要があるためです。 
+sourceSets {
+    foo.java.srcDirs { "src/main/foo" }
+    bar.java.srcDirs { "src/main/bar" }
+}
+
 ext {
     // このプロパティはプラグインを適用する（"apply plugin: 'com.github.opengl-BOBO.assertjGen'"）前に宣言する必要があります。
     // それは、ここで宣言するプロパティはプラグインがタスクを定義する前に読み込む必要があるからです。
     assertjGenPreConfig = [
         // AssertJ Assertions Generator の依存関係を指定します（デフォルトは 2.0.0 を使用します）
-        'assertjGenerator': 'org.assertj:assertj-assertions-generator:2.0.0'
+        'assertjGenerator': 'org.assertj:assertj-assertions-generator:2.0.0',
+        // sourceSets の名前を指定します（デフォルトは ['main'] です）
+        'sourceSets': ['main', 'foo', 'bar']
     ]
 }
 
@@ -251,11 +274,12 @@ assertjGen {
 
 ## リリースノート
 - v1.1.5 (2017-09-06)
-    - `assertjGenerator` オプションについて README.md の説明を更新. [#12](https://github.com/opengl-8080/assertjGen-gradle-plugin/issues/12)
+    - バグ修正のため、 `assertjGenPreConfig` を導入し、 `assertjGenerator` オプションを移動. [#12](https://github.com/opengl-8080/assertjGen-gradle-plugin/issues/12)
+    - `assertjGenPreConfig` に `sourceSets` を追加. [#11](https://github.com/opengl-8080/assertjGen-gradle-plugin/issues/11)
 - v1.1.4 (2017-07-08)
     - Bugfix [#8](https://github.com/opengl-8080/assertjGen-gradle-plugin/issues/8)
 - v1.1.3 (2017-04-29)
-    - Bugfix [#4](https://github.com/opengl-8080/assertjGen-gradle-plugin/issues/4) and [#7](https://github.com/opengl-8080/assertjGen-gradle-plugin/issues/7)
+    - Bugfix [#4](https://github.com/opengl-8080/assertjGen-gradle-plugin/issues/4), [#7](https://github.com/opengl-8080/assertjGen-gradle-plugin/issues/7)
 - v1.1.2 (2017-02-12)
     - Bugfix [#3](https://github.com/opengl-8080/assertjGen-gradle-plugin/issues/3)
     - Bugfix [#5](https://github.com/opengl-8080/assertjGen-gradle-plugin/issues/5)
