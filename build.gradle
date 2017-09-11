@@ -5,7 +5,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'com.gradle.publish:plugin-publish-plugin:0.9.2'
+        classpath 'com.gradle.publish:plugin-publish-plugin:0.9.7'
     }
 }
 
@@ -20,7 +20,7 @@ dependencies {
     compile localGroovy()
 }
 
-version = '1.1.6'
+version = '1.1.7'
 group = 'com.github.opengl-8080'
 
 pluginBundle {
