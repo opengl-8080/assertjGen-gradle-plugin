@@ -1,8 +1,8 @@
 # assertjGen-gradle-plugin
 Gradle plugin that generate AssertJ assertion class.
 
-# Attention (2017-09-10)
-You may get an error if you upgrade to 1.1.5+.
+# Attention (2017-09-11)
+You may get an error if you upgrade to 1.1.7+.
 Because `assertjGenerator` configuration was removed for bugfix [#12](https://github.com/opengl-8080/assertjGen-gradle-plugin/issues/12).
 
 Please configure `assertjGenerator` at `assertjGenPreConfig` instead.
@@ -111,9 +111,11 @@ This task deletes generated classes (`*.java` files).
 If you run `clean` task, then `assertjClean` task is also run.
 
 # Release Note
-- v1.1.5 (2017-09-06)
+- v1.1.7 (2017-09-11)
     - Add `assertjGenPreConfig` option for bugfix #12, and move `assertjGenerator` option to it. [#12](https://github.com/opengl-8080/assertjGen-gradle-plugin/issues/12)
     - Add `sourceSets` option to `assertjGenPreConfig`. [#11](https://github.com/opengl-8080/assertjGen-gradle-plugin/issues/11)
+- <del>v1.1.5, v1.1.6</del>
+    - **These two versions are unavailable because I failed to publish plugin.**
 - v1.1.4 (2017-07-08)
     - Bugfix [#8](https://github.com/opengl-8080/assertjGen-gradle-plugin/issues/8)
 - v1.1.3 (2017-04-29)
@@ -159,8 +161,8 @@ Please configure `repositories` explicitly.
 
 
 # 日本語の説明
-# 注意事項 (2017-09-10)
-1.1.5 以上にアップデートすると、エラーが発生することがあります.
+# 注意事項 (2017-09-11)
+1.1.7 以上にアップデートすると、エラーが発生することがあります.
 これは、 [#12](https://github.com/opengl-8080/assertjGen-gradle-plugin/issues/12) のバグ修正で、 `assertjGenerator` オプションが削除されたからです.
 
 代わりに、 `assertjGenPreConfig` に `assertjGenerator` を設定してください.
@@ -273,9 +275,11 @@ assertjGen {
 このタスクは、 `clean` タスクを実行すると一緒に実行されます。
 
 ## リリースノート
-- v1.1.5 (2017-09-06)
+- v1.1.7 (2017-09-11)
     - バグ修正のため、 `assertjGenPreConfig` を導入し、 `assertjGenerator` オプションを移動. [#12](https://github.com/opengl-8080/assertjGen-gradle-plugin/issues/12)
     - `assertjGenPreConfig` に `sourceSets` を追加. [#11](https://github.com/opengl-8080/assertjGen-gradle-plugin/issues/11)
+- <del>v1.1.5, v1.1.6</del>
+    - **この２つのバージョンは、プラグインの publish に失敗したため、利用できません**
 - v1.1.4 (2017-07-08)
     - Bugfix [#8](https://github.com/opengl-8080/assertjGen-gradle-plugin/issues/8)
 - v1.1.3 (2017-04-29)
