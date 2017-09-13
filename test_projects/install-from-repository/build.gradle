@@ -17,7 +17,6 @@ assertjGen {
 }
 
 task('testAssertjGen') {
-    dependsOn 'assertjClean'
     dependsOn 'assertjGen'
     
     doLast {
