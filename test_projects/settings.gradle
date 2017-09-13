@@ -8,5 +8,6 @@ include (
     'subproject:bar',
     'configurationName',
     'assertjGenerator',
-    'sourceSets'
+    'sourceSets',
+    'assertj_depends_on_other_configuration'
 )

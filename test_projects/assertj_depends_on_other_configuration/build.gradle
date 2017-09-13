@@ -1,0 +1,32 @@
+buildscript {
+    dependencies {
+        classpath files((String)localJarPath)
+    }
+}
+
+apply plugin: "com.github.opengl-BOBO.assertjGen"
+
+assertjGen {
+    classOrPackageNames = ['foo']
+}
+
+configurations {
+    implementation
+}
+
+dependencies {
+    implementation "org.antlr:antlr4-runtime:4.7"
+    assertj configurations.implementation
+}
+
+task('testAssertjGen') {
+    dependsOn 'assertjGen'
+    
+    doLast {
+        def antlr4 = configurations.assertj.find { file ->
+            file.name.contains("antlr4-runtime")
+        }
+        
+        assert antlr4 != null
+    }
+}
