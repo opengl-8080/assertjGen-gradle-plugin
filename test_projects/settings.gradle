@@ -6,5 +6,6 @@ include (
     'cleanFilesPattern',
     'subproject:foo',
     'subproject:bar',
-    'configurationName'
+    'configurationName',
+    'assertjGenerator'
 )
