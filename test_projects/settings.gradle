@@ -3,5 +3,7 @@ include (
     'install-from-repository',
     'outputDir',
     'cleanOnlyFiles',
-    'cleanFilesPattern'
+    'cleanFilesPattern',
+    'subproject:foo',
+    'subproject:bar'
 )
