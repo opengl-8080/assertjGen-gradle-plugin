@@ -9,5 +9,6 @@ include (
     'configurationName',
     'assertjGenerator',
     'sourceSets',
-    'assertj_depends_on_other_configuration'
+    'assertj_depends_on_other_configuration',
+    'skip_clean_if_outputDir_does_not_exists'
 )
