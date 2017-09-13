@@ -1,0 +1,4 @@
+include (
+    'basic',
+    'install-from-repository'
+)
