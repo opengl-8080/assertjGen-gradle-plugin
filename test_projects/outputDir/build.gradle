@@ -8,6 +8,7 @@ apply plugin: "com.github.opengl-BOBO.assertjGen"
 
 assertjGen {
     classOrPackageNames = ['foo']
+    outputDir = 'src/test/java'
 }
 
 task('testAssertjGen') {
@@ -15,7 +16,7 @@ task('testAssertjGen') {
     dependsOn 'assertjGen'
     
     doLast {
-        File file = file("src/test/java-gen/foo/HogeAssert.java")
+        File file = file("src/test/java/foo/HogeAssert.java")
         assert file.exists()
         assert 0L < file.length()
     }
