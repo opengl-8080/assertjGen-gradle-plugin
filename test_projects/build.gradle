@@ -9,7 +9,9 @@ allprojects {
     apply plugin: 'java'
 
     repositories {
-        mavenCentral()
+        if (project.name != "use_no_maven_central") {
+            mavenCentral()
+        }
     }
 
     dependencies {
