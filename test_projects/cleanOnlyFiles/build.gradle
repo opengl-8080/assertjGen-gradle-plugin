@@ -1,0 +1,24 @@
+buildscript {
+    dependencies {
+        classpath files((String)localJarPath)
+    }
+}
+
+apply plugin: "com.github.opengl-BOBO.assertjGen"
+
+assertjGen {
+    classOrPackageNames = ['foo']
+    outputDir = 'src/test/java'
+    cleanOnlyFiles = true
+}
+
+task('testAssertjGen') {
+    dependsOn 'assertjClean'
+    dependsOn 'assertjGen'
+    
+    doLast {
+        File file = file("src/test/java/foo/HogeTest.java")
+        assert file.exists()
+        assert 0L < file.length()
+    }
+}

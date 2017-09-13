@@ -1,5 +1,6 @@
 include (
     'basic',
     'install-from-repository',
-    'outputDir'
+    'outputDir',
+    'cleanOnlyFiles'
 )
