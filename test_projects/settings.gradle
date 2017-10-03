@@ -11,5 +11,6 @@ include (
     'sourceSets',
     'assertj_depends_on_other_configuration',
     'skip_clean_if_outputDir_does_not_exists',
-    'use_no_maven_central'
+    'use_no_maven_central',
+    'with_kotlin'
 )

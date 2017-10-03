@@ -7,6 +7,7 @@ import org.gradle.api.tasks.Delete
 import org.gradle.api.tasks.JavaExec
 import org.gradle.api.tasks.SourceSet
 import org.gradle.api.tasks.SourceSetContainer
+import org.gradle.api.tasks.SourceSetOutput
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -92,9 +93,25 @@ class AssertjGen implements Plugin<Project> {
         project.dependencies.add(configurationName, preConfig.assertjGenerator)
 
         this.getConfiguredSourceSets(project).each {sourceSet ->
-            File classesDir = sourceSet.output.classesDir
-            project.dependencies.add(configurationName, project.files(classesDir))
+            this.forEachClassesDirs(sourceSet) { File classesDir ->
+                project.dependencies.add(configurationName, project.files(classesDir))
+            }
         }
+    }
+    
+    private void forEachClassesDirs(SourceSet sourceSet, Closure closure) {
+        SourceSetOutput output = sourceSet.output
+        List<File> dirs = []
+
+        if (output.hasProperty("classesDirs")) {
+            // <= Gradle 4.x
+            dirs.addAll(output.classesDirs)
+        } else {
+            // Gradle 4.x <
+            dirs.add(output.classesDir)
+        }
+        
+        dirs.each(closure)
     }
     
     private void defineAssertjCleanTask(Project project) {

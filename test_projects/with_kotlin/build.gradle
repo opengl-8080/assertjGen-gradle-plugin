@@ -1,0 +1,29 @@
+buildscript {
+    ext.kotlin_version = '1.1.51'
+
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath files((String)localJarPath)
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
+
+apply plugin: "kotlin"
+apply plugin: "com.github.opengl-BOBO.assertjGen"
+
+assertjGen {
+    classOrPackageNames = ['foo']
+}
+
+task('testAssertjGen') {
+    dependsOn 'assertjGen'
+
+    doLast {
+        File file = file("src/test/java-gen/foo/HogeAssert.java")
+        assert file.exists()
+        assert 0L < file.length()
+    }
+}
