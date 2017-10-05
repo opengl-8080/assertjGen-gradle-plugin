@@ -111,6 +111,8 @@ This task deletes generated classes (`*.java` files).
 If you run `clean` task, then `assertjClean` task is also run.
 
 # Release Note
+- v1.1.8 (2017-10-05)
+    - Bugfix [#17](https://github.com/opengl-8080/assertjGen-gradle-plugin/issues/17)
 - v1.1.7 (2017-09-11)
     - Add `assertjGenPreConfig` option for bugfix #12, and move `assertjGenerator` option to it. [#12](https://github.com/opengl-8080/assertjGen-gradle-plugin/issues/12)
     - Add `sourceSets` option to `assertjGenPreConfig`. [#11](https://github.com/opengl-8080/assertjGen-gradle-plugin/issues/11)
@@ -275,6 +277,8 @@ assertjGen {
 このタスクは、 `clean` タスクを実行すると一緒に実行されます。
 
 ## リリースノート
+- v1.1.8 (2017-10-05)
+    - Bugfix [#17](https://github.com/opengl-8080/assertjGen-gradle-plugin/issues/17)
 - v1.1.7 (2017-09-11)
     - バグ修正のため、 `assertjGenPreConfig` を導入し、 `assertjGenerator` オプションを移動. [#12](https://github.com/opengl-8080/assertjGen-gradle-plugin/issues/12)
     - `assertjGenPreConfig` に `sourceSets` を追加. [#11](https://github.com/opengl-8080/assertjGen-gradle-plugin/issues/11)
