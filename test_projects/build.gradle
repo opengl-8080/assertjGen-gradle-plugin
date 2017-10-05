@@ -1,6 +1,6 @@
 buildscript {
     ext {
-        assertjGenPluginVersion = '1.1.7'
+        assertjGenPluginVersion = '1.1.8'
         localJarPath = "../../build/libs/assertjGen-gradle-plugin-${assertjGenPluginVersion}.jar"
     }
 }
