@@ -6,3 +6,4 @@ build/
 .idea/
 testproject/
 classes 
+out/
