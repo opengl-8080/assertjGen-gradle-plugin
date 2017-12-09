@@ -4,6 +4,6 @@
 build/
 .settings/
 .idea/
-testproject/
 classes 
 out/
+*.iml

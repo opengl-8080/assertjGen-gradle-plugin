@@ -1,0 +1,30 @@
+buildscript {
+    dependencies {
+        classpath files((String)localJarPath)
+    }
+}
+
+apply plugin: "com.github.opengl-BOBO.assertjGen"
+
+assertjGen {
+    packages = ["sample"]
+    debug = true
+}
+
+sourceSets {
+    test {
+        java {
+           srcDirs assertjGen.resolveTargetDir(project)
+        }
+    }
+}
+
+task('testAssertjGen') {
+    dependsOn 'assertjGen'
+
+    doLast {
+        assertBasic(assertjGen.resolveTargetDir(project))
+    }
+}
+
+tasks.assertjGen.dependsOn(clean)

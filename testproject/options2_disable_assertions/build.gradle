@@ -1,0 +1,42 @@
+buildscript {
+    dependencies {
+        classpath files((String)localJarPath)
+    }
+}
+
+apply plugin: "com.github.opengl-BOBO.assertjGen"
+
+assertjGen {
+    packages = ["sample"]
+    generateAssertions = false
+    generateBddAssertions = false
+    generateSoftAssertions = false
+    generateJUnitSoftAssertions = false
+    
+    debug = true
+}
+
+sourceSets {
+    test {
+        java {
+           srcDirs assertjGen.resolveTargetDir(project)
+        }
+    }
+}
+
+task('testAssertjGen') {
+    dependsOn 'assertjGen'
+
+    doLast {
+        String targetDir = assertjGen.resolveTargetDir(project)
+        
+        assertExistsFile(file("${targetDir}/sample/FooAssert.java"))
+        
+        assertNotExistsFile(file("${targetDir}/sample/Assertions.java"))
+        assertNotExistsFile(file("${targetDir}/sample/BddAssertions.java"))
+        assertNotExistsFile(file("${targetDir}/sample/JUnitSoftAssertions.java"))
+        assertNotExistsFile(file("${targetDir}/sample/SoftAssertions.java"))
+    }
+}
+
+tasks.assertjGen.dependsOn(clean)

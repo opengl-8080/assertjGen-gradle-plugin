@@ -1,0 +1,53 @@
+buildscript {
+    ext {
+        assertjGenPluginVersion = '2.0.0'
+        localJarPath = "../../build/libs/assertjGen-gradle-plugin-${assertjGenPluginVersion}.jar"
+        remoteDependencies = "gradle.plugin.com.github.opengl-8080:assertjGen-gradle-plugin:${assertjGenPluginVersion}"
+    }
+    
+    repositories {
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+    dependencies {
+        classpath 'org.assertj:assertj-assertions-generator-maven-plugin:2.1.0'
+//        classpath 'org.assertj:assertj-assertions-generator:2.1.0'
+    }
+}
+
+allprojects {
+    apply plugin: 'java'
+
+    repositories {
+        if (project.name != "use_no_maven_central") {
+            mavenCentral()
+        }
+    }
+    
+    dependencies {
+        testCompile 'junit:junit:4.12'
+        testCompile 'org.assertj:assertj-core:3.5.2'
+    }
+}
+
+def assertExistsFile(File file) {
+    assert file.exists()
+    assert 0L < file.length()
+}
+
+def assertNotExistsFile(File file) {
+    assert !file.exists()
+}
+
+def assertBasic(String targetDir) {
+    assertExistsFile(file("${targetDir}/sample/Assertions.java"))
+    assertExistsFile(file("${targetDir}/sample/BddAssertions.java"))
+    assertExistsFile(file("${targetDir}/sample/JUnitSoftAssertions.java"))
+    assertExistsFile(file("${targetDir}/sample/SoftAssertions.java"))
+    assertExistsFile(file("${targetDir}/sample/HogeAssert.java"))
+}
+
+def assertFileContents(File file, String includedContents) {
+    assert file.text.contains(includedContents)
+}

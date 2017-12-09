@@ -1,0 +1,92 @@
+buildscript {
+    dependencies {
+        classpath files((String)localJarPath)
+    }
+}
+
+apply plugin: "com.github.opengl-BOBO.assertjGen"
+
+assertjGen {
+    packages = ["sample"]
+    generateAssertionsInPackage = "sample.assertions"
+    cleanTargetDir = true
+    includes = [/sample\.foo\..*/]
+    excludes = [".*IgnoreClass"]
+    generateAssertionsForAllFields = true
+    entryPointClassPackage = "sample.assertions.entries"
+    writeReportInFile = file("${buildDir.getPath()}/report.txt")
+    templates {
+        templatesDirectory = "${project.projectDir.getPath()}"
+        hierarchicalAssertionConcreteClass = "my_assert_class_template.txt"
+    }
+    
+    debug = true
+}
+
+sourceSets {
+    test {
+        java {
+           srcDirs assertjGen.resolveTargetDir(project)
+        }
+    }
+}
+
+ext {
+    deleteTargetFileName = "delete-target"
+}
+
+task('testAssertjGen') {
+    dependsOn 'assertjGen'
+
+    doLast {
+        String targetDir = assertjGen.resolveTargetDir(project)
+        
+        // test generateAssertionsInPackage (sample.assertions)
+        assertExistsFile(file("${targetDir}/sample/assertions/FooAssert.java"))
+        
+        // test cleanTargetDir
+        assertNotExistsFile(file("${targetDir}/${deleteTargetFileName}"))
+        
+        // test includes
+        assertNotExistsFile(file("${targetDir}/sample/assertions/BarAssert.java"))
+        
+        // test excludes
+        assertNotExistsFile(file("${targetDir}/sample/assertions/IgnoreClassAssert.java"))
+        
+        // test generateAssertionsForAllFields
+        assertFileContents(file("${targetDir}/sample/assertions/AbstractFooAssert.java"), "hasPrivateField(int privateField)")
+        
+        // test entryPointClassPackage
+        assertExistsFile(file("${targetDir}/sample/assertions/entries/Assertions.java"))
+        assertExistsFile(file("${targetDir}/sample/assertions/entries/BddAssertions.java"))
+        assertExistsFile(file("${targetDir}/sample/assertions/entries/JUnitSoftAssertions.java"))
+        assertExistsFile(file("${targetDir}/sample/assertions/entries/SoftAssertions.java"))
+        
+        // test writeReportInFile
+        assertExistsFile(file("${buildDir.getPath()}/report.txt"))
+        
+        // test templates
+        assertFileContents(file("${targetDir}/sample/assertions/FooAssert.java"), "This file generated with custom template file.")
+    }
+}
+
+task('createDeleteTargetFile') {
+    doLast {
+        String targetDir = assertjGen.resolveTargetDir(project)
+        File deleteTarget = file("${targetDir}/${deleteTargetFileName}")
+        deleteTarget.parentFile.mkdirs()
+        deleteTarget << "this file should be deleted."
+    }
+}
+
+task('deleteReportFile') {
+    doLast {
+        File report = file("${buildDir.getPath()}/report.txt")
+        if (report.exists()) {
+            report.delete()
+        }
+    }
+}
+
+tasks.assertjGen.dependsOn('deleteReportFile')
+tasks.assertjGen.dependsOn('createDeleteTargetFile')

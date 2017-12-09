@@ -1,0 +1,9 @@
+include (
+    'basic',
+    'custom_configurations',
+    'use_no_maven_central',
+    'custom_sourceSets',
+    'with_kotlin',
+    'options1',
+    'options2_disable_assertions'
+)

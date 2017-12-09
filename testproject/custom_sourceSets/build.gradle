@@ -1,0 +1,31 @@
+buildscript {
+    dependencies {
+        classpath files((String)localJarPath)
+    }
+}
+
+apply plugin: 'java'
+apply plugin: "com.github.opengl-BOBO.assertjGen"
+
+sourceSets {
+    api.java.srcDir { "src/api/java" }
+}
+
+assertjGen {
+    packages = ['sample']
+    sourceSets = ["api"] // required
+    debug = true
+}
+
+task('testAssertjGen') {
+    dependsOn 'assertjGen'
+    
+    doLast {
+        String targetDir = assertjGen.resolveTargetDir(project)
+        assertBasic(targetDir)
+        assertExistsFile(file("${targetDir}/sample/FugaAssert.java"))
+    }
+}
+
+tasks.assertjGen.dependsOn(clean)
+tasks.assertjGen.dependsOn('compileApiJava') // required

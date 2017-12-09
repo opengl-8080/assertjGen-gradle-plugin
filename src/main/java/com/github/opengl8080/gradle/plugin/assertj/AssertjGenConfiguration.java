@@ -4,6 +4,7 @@ import groovy.lang.Closure;
 import org.assertj.maven.Templates;
 import org.gradle.api.Project;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -74,10 +75,34 @@ public class AssertjGenConfiguration {
                 ", generateSoftAssertions=" + generateSoftAssertions +
                 ", quiet=" + quiet +
                 ", writeReportInFile='" + writeReportInFile + '\'' +
-                ", templates=" + templates +
+                ", templates=" + this.toString(this.templates) +
                 ", configurations=" + configurations +
                 ", sourceSets=" + sourceSets +
                 ", debug=" + debug +
                 '}';
+    }
+    
+    private String toString(Templates templates) {
+        if (templates == null) {
+            return "null";
+        }
+        
+        StringBuilder sb = new StringBuilder("Template[");
+        try {
+            Field[] fields = Templates.class.getFields();
+            for (int i = 0; i < fields.length; i++) {
+                Field field = fields[i];
+                sb.append(field.getName()).append("=").append(field.get(templates));
+
+                if (i < fields.length - 1) {
+                    sb.append(", ");
+                }
+            }
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+        sb.append("]");
+        
+        return sb.toString();
     }
 }
