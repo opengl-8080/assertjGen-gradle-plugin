@@ -5,7 +5,7 @@ buildscript {
 }
 
 apply plugin: 'java'
-apply plugin: "com.github.opengl-BOBO.assertjGen"
+apply plugin: "com.github.opengl-BOBO.assertjGen2"
 
 sourceSets {
     api.java.srcDir { "src/api/java" }

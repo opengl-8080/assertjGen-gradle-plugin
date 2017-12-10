@@ -16,7 +16,7 @@ buildscript {
     }
 }
 
-apply plugin: "com.github.opengl-BOBO.assertjGen"
+apply plugin: "com.github.opengl-BOBO.assertjGen2"
 
 repositories {
     mavenCentral()
