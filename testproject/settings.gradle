@@ -5,5 +5,6 @@ include (
     'custom_sourceSets',
     'with_kotlin',
     'options1',
-    'options2_disable_assertions'
+    'options2_disable_assertions',
+    'install_from_repository'
 )
