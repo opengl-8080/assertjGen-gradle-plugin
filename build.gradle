@@ -26,7 +26,7 @@ dependencies {
 version = '2.0.0'
 group = 'com.github.opengl-8080'
 
-/*
+
 pluginBundle {
     website = 'https://github.com/opengl-8080/assertjGen-gradle-plugin'
     vcsUrl = 'https://github.com/opengl-8080/assertjGen-gradle-plugin'
@@ -40,4 +40,3 @@ pluginBundle {
         }
     }
 }
-*/
